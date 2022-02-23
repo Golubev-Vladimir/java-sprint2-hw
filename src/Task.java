@@ -1,20 +1,16 @@
-import java.util.ArrayList;
-
 public class Task {
     private String name;
-    private Object description;
-    private String status;
-    private int id;
+    private String description;
+    private Status status;
+    private long id;
 
-    public Task(String name, ArrayList<SubTask> description) { //конструктор для наследника Epic
-        this.name = name;
-        this.description = description;
-    }
-
-    public Task(String name, Object description, String status) { //конструктор для наследника SubTask
+    public Task(String name, String description, Status status) {
         this.name = name;
         this.description = description;
         this.status = status;
+    }
+
+    public Task() {
     }
 
     @Override
@@ -23,38 +19,37 @@ public class Task {
                 ". Описание: " + getDescription() +
                 ". УИН: " + getId() +
                 ". Статус: " + getStatus();
-
     }
 
     public String getName() {
         return name;
     }
 
-    public Object getDescription() {
-        return description;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public int getId() {
-        return id;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setDescription(Object description) {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setStatus(String status) {
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public void setId(int id) {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
         this.id = id;
     }
 }

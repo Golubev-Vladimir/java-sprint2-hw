@@ -1,152 +1,212 @@
 import java.util.ArrayList;
-
 import java.util.HashMap;
 
 public class Manager {
-    private int id = 0;
-    private HashMap<Integer, Object> tasks = new HashMap<>(); // 1. Хранение
-    private HashMap<Integer, Object> epics = new HashMap<>();
-    private HashMap<Integer, Object> subTasks = new HashMap<>();
+    private long idCounter = 0;
+    long idEpicForSubtask;
+    boolean statusNew;
+    boolean statusDone;
+    ArrayList<Subtask> subtaskList;
+    private final HashMap<Long, Task> tasks = new HashMap<>();
+    private final HashMap<Long, Epic> epics = new HashMap<>();
+    private final HashMap<Long, Subtask> subtasks = new HashMap<>();
 
-    ArrayList<Object> getAllTasks() { // 2.1. Получение списка всех задач
-        ArrayList<Object> allTasks = new ArrayList<>();
-        allTasks.add(tasks);
-        allTasks.add(epics);
-        allTasks.add(subTasks); //наверное можно было subTasks не включать в allTasks , т.к. они уже включены в epics
-        return allTasks;
+    public HashMap<Long, Task> getTasks() {
+        return tasks;
     }
 
-    Object getTasksByType(String type) { // отдельный метод, хотя можно использовать простое геттер, условия задачи???
+    public HashMap<Long, Epic> getEpics() {
+        return epics;
+    }
+
+    public HashMap<Long, Subtask> getSubtasks() {
+        return subtasks;
+    }
+
+    Object getTasksByType(Type type) {
         if (type == null) {
             return "Неправильно заданы параметры";
         }
         switch (type) {
-            case "Task":
+            case Task:
                 return tasks;
-            case "Epic":
+            case Epic:
                 return epics;
-            case "SubTask":
-                return subTasks;
-        }
-        return "Такой задачи пока нет";
-    }
-
-    void deleteAllTasks() {                       // 2.2. Удаление всех задач
-        tasks.clear();
-        epics.clear();
-        subTasks.clear();
-    }
-
-    Object getTaskById(int id) {                 //2.3 Получение по идентификатору
-        if (tasks.containsKey(id)) {
-            return tasks.get(id);
-        }
-        if (epics.containsKey(id)) {
-            return epics.get(id);
-        }
-        if (subTasks.containsKey(id)) {
-            return subTasks.get(id);
+            case Subtask:
+                return subtasks;
         }
         return null;
     }
 
-    public Object createTask(Object object) {             //2.4 Создание. Сам объект должен передаваться в качестве параметра.
-        if (object == null) {
-            return "Неправильно заданы параметры";
-        }
-        switch (object.getClass().getName()) {
-            case "Task":
-                ((Task) object).setId(++id);
-                tasks.put(((Task) object).getId(), object);
-                break;
-            case "Epic":
-                ((Epic) object).setId(++id);
-                epics.put(((Epic) object).getId(), object);
-                break;
-            case "SubTask":
-                ((SubTask) object).setId(++id);
-                subTasks.put(((SubTask) object).getId(), object);
-                break;
-            default:
-                System.out.println("Не сохранено. Неизвестный тип задачи");
-        }
-        return object; // возвращаем для удобства самопроверки в Main
+    void deleteAllTasks() {
+        tasks.clear();
+        epics.clear();
+        subtasks.clear();
     }
 
-    public void updateTask(Object object) {//2.5 Обновление.Новая версия объекта c верным id передаются в виде параметра
-        if (object == null) {
-            System.out.println("Неправильно заданы параметры");
-            switch (object.getClass().getName()) {
-                case "Task":
-                    tasks.put(((Task) object).getId(), object);
-                    break;
-                case "Epic":
-                    epics.put(((Epic) object).getId(), object);
-                    break;
-                case "SubTask":
-                    subTasks.put(((SubTask) object).getId(), object);
-                    break;
-                default:
-                    System.out.println("Не сохранено. Неизвестный тип задачи");
+    Task getTaskById(long id) {
+        if (tasks.containsKey(id)) {
+            return tasks.get(id);
+        }
+        return null;
+    }
+
+    Task getEpicById(long id) {
+        if (epics.containsKey(id)) {
+            return epics.get(id);
+        }
+        return null;
+    }
+
+    Task getSubtaskById(long id) {
+        if (subtasks.containsKey(id)) {
+            return subtasks.get(id);
+        }
+        return null;
+    }
+
+    public void saveTask(Task task) {
+        tasks.put(++idCounter, task);
+        task.setId(idCounter);
+    }
+
+    public void saveEpic(Epic epic) {
+        epics.put(++idCounter, epic);
+        epic.setId(idCounter);
+        subtaskList = new ArrayList<>();
+        epic.setSubtaskOfEpic(subtaskList);
+        idEpicForSubtask = idCounter;
+        epic.setStatus(Status.NEW);
+    }
+
+    public void saveSubtask(Subtask subtask) {
+        subtasks.put(++idCounter, subtask);
+        subtask.setId(idCounter);
+        subtaskList.add(subtask);
+        subtask.setIdOfEpic(idEpicForSubtask);
+
+        statusNew = true;
+        statusDone = true;
+
+        for (Subtask i : subtaskList) {
+            if (!i.getStatus().equals(Status.NEW)) {
+                statusNew = false;
+            }
+            if (!i.getStatus().equals(Status.DONE)) {
+                statusDone = false;
             }
         }
+        if (statusNew) {
+            epics.get(idEpicForSubtask).setStatus(Status.NEW);
+        } else if (statusDone) {
+            epics.get(idEpicForSubtask).setStatus(Status.DONE);
+        } else {
+            epics.get(idEpicForSubtask).setStatus(Status.IN_PROGRESS);
+        }
     }
 
-    void deleteTaskById(int id) {                   //2.6 Удаление по идентификатору.
-        for (int i : tasks.keySet()) {
-            if (i == id) {
+    public void updateTask(Task task) {
+        tasks.put(task.getId(), task);
+    }
+
+    public void updateEpic(Epic epic) {
+        epics.put(epic.getId(), epic);
+        epic.setStatus(Status.NEW);
+        statusNew = true;
+        statusDone = true;
+        for (Subtask subtask : epic.getSubtaskOfEpic()) {
+            subtasks.remove(subtask.getId());
+            subtasks.put(subtask.getId(), subtask);
+
+            if (!subtask.getStatus().equals(Status.NEW)) {
+                statusNew = false;
+            }
+            if (!subtask.getStatus().equals(Status.DONE)) {
+                statusDone = false;
+            }
+        }
+        if (statusNew) {
+            epic.setStatus(Status.NEW);
+        } else if (statusDone) {
+            epic.setStatus(Status.DONE);
+        } else {
+            epic.setStatus(Status.IN_PROGRESS);
+        }
+    }
+
+    public void updateSubtask(Subtask subtask) {
+        subtasks.put(subtask.getId(), subtask);
+        statusNew = true;
+        statusDone = true;
+        for (Subtask i : epics.get(subtask.getIdOfEpic()).getSubtaskOfEpic()) {
+            if (i.getId() == subtask.getId()) {
+                epics.get(subtask.getIdOfEpic()).getSubtaskOfEpic().remove(i);
+                epics.get(subtask.getIdOfEpic()).getSubtaskOfEpic().add(subtask);
+                break;
+            }
+        }
+        for (Subtask j : epics.get(subtask.getIdOfEpic()).getSubtaskOfEpic()) {
+            if (!j.getStatus().equals(Status.NEW)) {
+                statusNew = false;
+            }
+            if (!j.getStatus().equals(Status.DONE)) {
+                statusDone = false;
+            }
+        }
+        if (statusNew) {
+            epics.get(subtask.getIdOfEpic()).setStatus(Status.NEW);
+        } else if (statusDone) {
+            epics.get(subtask.getIdOfEpic()).setStatus(Status.DONE);
+        } else {
+            epics.get(subtask.getIdOfEpic()).setStatus(Status.IN_PROGRESS);
+        }
+    }
+
+    void deleteTaskById(long idForDelete) {
+        for (long i : tasks.keySet()) {
+            if (i == idForDelete) {
                 tasks.remove(i);
                 return;
             }
         }
-        for (int i : epics.keySet()) {
-            if (i == id) {
+        for (long i : epics.keySet()) {
+            if (i == idForDelete) {
                 epics.remove(i);
+                ArrayList<Long> listSubtaskForDelete = new ArrayList<>();
+                for (Subtask subtask : subtasks.values()) {
+                    if (subtask.getIdOfEpic() == i) {
+                        listSubtaskForDelete.add(subtask.getId());
+                    }
+                }
+                for (long j : listSubtaskForDelete) {
+                    subtasks.remove(j);
+                }
                 return;
             }
         }
-        for (int i : subTasks.keySet()) {
-            if (i == id) {
-                subTasks.remove(i);
+        for (long i : subtasks.keySet()) {
+            if (i == idForDelete) {
+                idEpicForSubtask = subtasks.get(i).getIdOfEpic(); //узнали Epic
+                for (Epic epic : epics.values()) {
+                    if (epic.getId() == idEpicForSubtask) {
+                        epic.getSubtaskOfEpic().remove(subtasks.get(i));
+                    }
+                }
+                subtasks.remove(i);
                 return;
             }
         }
     }
 
-    Object getSubTaskOfEpic(Epic epic) { //3.1 Получение списка всех подзадач определённого эпика.
-        for (Object i : epics.values())
-            if (i.equals(epic)) {
-                return i;
-            }
+    Subtask getSubTaskOfEpic(long idOfEpic) {
+        for (Subtask subtask : epics.get(idOfEpic).getSubtaskOfEpic()) {
+            return subtask;
+        }
         return null;
     }
 
     @Override
-    public String toString() { // для вывода в консоль списка всех задач.
-        return tasks.values() + "\n" + epics.values() + "\n" + subTasks.values();
-    }
-
-    public HashMap<Integer, Object> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(HashMap<Integer, Object> tasks) {
-        this.tasks = tasks;
-    }
-
-    public HashMap<Integer, Object> getEpics() {
-        return epics;
-    }
-
-    public void setEpics(HashMap<Integer, Object> epics) {
-        this.epics = epics;
-    }
-
-    public HashMap<Integer, Object> getSubTasks() {
-        return subTasks;
-    }
-
-    public void setSubTasks(HashMap<Integer, Object> subTasks) {
-        this.subTasks = subTasks;
+    public String toString() {
+        return tasks.values() + "\n" + epics.values() + "\n" + subtasks.values();
     }
 }
