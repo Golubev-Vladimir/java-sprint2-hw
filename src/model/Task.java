@@ -1,16 +1,21 @@
+package model;
+
 public class Task {
     private String name;
     private String description;
     private Status status;
     private long id;
 
-    public Task(String name, String description, Status status) {
+    public Task(String name, String description, Status status, long id) {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.id = id;
     }
 
-    public Task() {
+    public Task(String name, long id) {
+        this.name = name;
+        this.id = id;
     }
 
     @Override
