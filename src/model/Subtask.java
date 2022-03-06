@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Subtask extends Task {
     private long epicId;
 
@@ -14,6 +16,23 @@ public class Subtask extends Task {
 
     public void setEpicId(long epicId) {
         this.epicId = epicId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Subtask otherSubtask = (Subtask) o;
+        return Objects.equals(getName(), otherSubtask.getName())
+                && Objects.equals(getDescription(), otherSubtask.getDescription())
+                && Objects.equals(getStatus(), otherSubtask.getStatus())
+                && (getId() == otherSubtask.getId())
+                && (epicId == otherSubtask.epicId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getDescription(), getStatus(), getId(), epicId);
     }
 
     @Override
