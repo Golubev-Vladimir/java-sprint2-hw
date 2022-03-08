@@ -3,21 +3,21 @@ package model;
 import java.util.Objects;
 
 public class Task {
+    private long id;
     private String name;
     private String description;
     private Status status;
-    private long id;
 
-    public Task(String name, String description, Status status, long id) {
+    public Task(long id, String name, String description, Status status) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;
-        this.id = id;
     }
 
-    public Task(String name, long id) {
-        this.name = name;
+    public Task(long id, String name) {
         this.id = id;
+        this.name = name;
     }
 
     public String getName() {
@@ -57,15 +57,15 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task otherTask = (Task) o;
-        return Objects.equals(name, otherTask.name)
+        return (id == otherTask.id)
                 && Objects.equals(description, otherTask.description)
                 && Objects.equals(status, otherTask.status)
-                && (id == otherTask.id);
+                && Objects.equals(name, otherTask.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, status, id);
+        return Objects.hash(id, name, description, status);
     }
 
     @Override

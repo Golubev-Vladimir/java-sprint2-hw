@@ -11,55 +11,48 @@ public class Main {
         TaskManager inMemoryTaskManager = Managers.getDefault();
         Counter counter = new Counter();
 
-        Epic epicBuyFlat = new Epic("BUY FLAT", counter.generateId());
+        Epic epicBuyFlat = new Epic(counter.generateId(), "BUY FLAT");
         inMemoryTaskManager.saveEpic(epicBuyFlat);
-        inMemoryTaskManager.saveSubtask(new Subtask(
-                "Купить новую квартиру",
-                "найти риелтора, выбрать нужный вариант",
-                Status.DONE, counter.generateId(), epicBuyFlat.getId()));
-        inMemoryTaskManager.saveSubtask(new Subtask(
-                "Зарегистрировать право собственности",
-                "собрать все документы, передать документы в Росреестр",
-                Status.DONE, counter.generateId(), epicBuyFlat.getId()));
+        inMemoryTaskManager.saveSubtask(new Subtask(counter.generateId(), epicBuyFlat.getId(),
+                "Купить новую квартиру", "найти риелтора, выбрать нужный вариант", Status.DONE));
+        inMemoryTaskManager.saveSubtask(new Subtask(counter.generateId(), epicBuyFlat.getId(),
+                "Зарегистрировать право собственности", "собрать все документы, передать документы в Росреестр",
+                Status.DONE));
 
-        Epic epicRepairFlat = new Epic("REPAIR FLAT", counter.generateId());
+        Epic epicRepairFlat = new Epic(counter.generateId(), "REPAIR FLAT");
         inMemoryTaskManager.saveEpic(epicRepairFlat);
-        inMemoryTaskManager.saveSubtask(new Subtask(
-                "Найти прораба",
-                "согласовать сроки, обсудить стоимость",
-                Status.NEW, counter.generateId(), epicRepairFlat.getId()));
-        inMemoryTaskManager.saveSubtask(new Subtask(
-                "Купить материалы",
-                "выбрать магазин, заказать доставку",
-                Status.DONE, counter.generateId(), epicRepairFlat.getId()));
+        inMemoryTaskManager.saveSubtask(new Subtask(counter.generateId(), epicRepairFlat.getId(),
+                "Найти прораба", "согласовать сроки, обсудить стоимость", Status.NEW));
+        inMemoryTaskManager.saveSubtask(new Subtask(counter.generateId(), epicRepairFlat.getId(),
+                "Купить материалы", "выбрать магазин, заказать доставку", Status.DONE));
 
-        Epic epicMove = new Epic("MOVE", counter.generateId());
+        Epic epicMove = new Epic(counter.generateId(), "MOVE");
         inMemoryTaskManager.saveEpic(epicMove);
 
-        inMemoryTaskManager.saveTask(new Task("Уборка", "вытереть пыль, пропылесосить, Помыть пол",
-                Status.DONE, counter.generateId()));
-        inMemoryTaskManager.saveTask(new Task("Новоселье", "купить шампанское, купить торт",
-                Status.IN_PROGRESS, counter.generateId()));
+        inMemoryTaskManager.saveTask(new Task(counter.generateId(), "Уборка",
+                "вытереть пыль, пропылесосить, Помыть пол", Status.DONE));
+        inMemoryTaskManager.saveTask(new Task(counter.generateId(), "Новоселье",
+                "купить шампанское, купить торт", Status.IN_PROGRESS));
 
-        Epic epicHomework = new Epic("Homework", counter.generateId());
+        Epic epicHomework = new Epic(counter.generateId(), "Homework");
         inMemoryTaskManager.saveEpic(epicHomework);
 
-        Epic epicStudy = new Epic("Study", counter.generateId());
+        Epic epicStudy = new Epic(counter.generateId(), "Study");
         inMemoryTaskManager.saveEpic(epicStudy);
 
-        inMemoryTaskManager.updateEpic(new Epic("Школа 21", 4)); // тест
+        inMemoryTaskManager.updateEpic(new Epic(4, "Школа 21")); // тест
 
         System.out.println("---------------"); // тест
         for (Task task : inMemoryTaskManager.getTasks().values()) {
             System.out.println(task);
         }
         System.out.println("---------------");
-        ;
+
         for (Task task : inMemoryTaskManager.getEpics().values()) {
             System.out.println(task);
         }
         System.out.println("---------------");
-        ;
+
         for (Task task : inMemoryTaskManager.getSubtasks().values()) {
             System.out.println(task);
         }

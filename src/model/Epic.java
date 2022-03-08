@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class Epic extends Task {
 
-    public Epic(String name, long id) {
-        super(name, id);
+    public Epic(long id, String name) {
+        super(id, name);
     }
 
     @Override
@@ -13,15 +13,15 @@ public class Epic extends Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Epic otherEpic = (Epic) o;
-        return Objects.equals(getName(), otherEpic.getName())
+        return (getId() == otherEpic.getId())
                 && Objects.equals(getDescription(), otherEpic.getDescription())
                 && Objects.equals(getStatus(), otherEpic.getStatus())
-                && (getId() == otherEpic.getId());
+                && Objects.equals(getName(), otherEpic.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getDescription(), getStatus(), getId());
+        return Objects.hash(getId(), getName(), getDescription(), getStatus());
     }
 
     @Override

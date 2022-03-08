@@ -34,11 +34,9 @@ public interface TaskManager {
 
     void updateSubtask(Subtask subtask);
 
-    void updateEpicStatus(long epicId);
-
     void deleteTaskById(long idDelete);
 
-    List<Subtask> getEpicSubtask(long epicId);;
+    List<Subtask> getEpicSubtask(long epicId);
 
     List<Task> history();
 }

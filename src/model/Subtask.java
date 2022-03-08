@@ -5,8 +5,8 @@ import java.util.Objects;
 public class Subtask extends Task {
     private long epicId;
 
-    public Subtask(String name, String description, Status status, long id, long epicId) {
-        super(name, description, status, id);
+    public Subtask(long id, long epicId, String name, String description, Status status) {
+        super(id, name, description, status);
         this.epicId = epicId;
     }
 
@@ -23,16 +23,16 @@ public class Subtask extends Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subtask otherSubtask = (Subtask) o;
-        return Objects.equals(getName(), otherSubtask.getName())
+        return (epicId == otherSubtask.epicId)
                 && Objects.equals(getDescription(), otherSubtask.getDescription())
                 && Objects.equals(getStatus(), otherSubtask.getStatus())
                 && (getId() == otherSubtask.getId())
-                && (epicId == otherSubtask.epicId);
+                && Objects.equals(getName(), otherSubtask.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getDescription(), getStatus(), getId(), epicId);
+        return Objects.hash(getId(), epicId, getName(), getDescription(), getStatus());
     }
 
     @Override
