@@ -95,7 +95,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateSubtask(Subtask subtask) {
+    public void updateSubtask(Subtask subtask) { // аналогичен методу saveSubtask()???
         subtasks.put(subtask.getId(), subtask);
         updateEpicStatus(subtask.getEpicId());
     }
@@ -118,29 +118,18 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTaskById(long idDelete) {
-        for (long id : tasks.keySet()) {
-            if (id == idDelete) {
-                tasks.remove(id);
-                return;
-            }
-        }
-        for (long id : epics.keySet()) {
-            if (id == idDelete) {
-                for (Subtask subtask : subtasks.values()) {
-                    if (epics.get(id).getId() == subtask.getEpicId()) {
-                        subtasks.remove(subtask.getId());
-                    }
-                }
-                epics.remove(id);
-                return;
-            }
-        }
-        for (long id : subtasks.keySet()) {
-            if (id == idDelete) {
-                subtasks.remove(id);
-                return;
-            }
-        }
+        tasks.keySet().removeIf(id -> id == idDelete);
+    }
+
+    @Override
+    public void deleteEpicById(long idDelete) {
+        epics.keySet().removeIf(id -> id == idDelete);
+        subtasks.values().removeIf(task -> task.getEpicId() == idDelete);
+    }
+
+    @Override
+    public void deleteSubtaskById(long idDelete) {
+        subtasks.keySet().removeIf(id -> id == idDelete);
     }
 
     @Override

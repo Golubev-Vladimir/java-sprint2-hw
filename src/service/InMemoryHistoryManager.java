@@ -1,30 +1,30 @@
 package service;
 
 import model.Task;
+import model.TaskLinkedList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private static final int HISTORY_MAX_SIZE = 10;
-    private final List<Task> lastViewedTasks = new ArrayList<>();
+    private final TaskLinkedList<Task> taskLinkedList = new TaskLinkedList<>();
 
     @Override
     public void add(Task newTask) {
-        for (Task task : lastViewedTasks) {
-            if (task.equals(newTask)) {
-                lastViewedTasks.remove(task);
-                break;
-            }
+        if (taskLinkedList.mapFastGet.containsKey(newTask.getId())) {
+            remove(newTask.getId());
         }
-        lastViewedTasks.add(newTask);
-        if (lastViewedTasks.size() > HISTORY_MAX_SIZE) {
-            lastViewedTasks.remove(0);
-        }
+        taskLinkedList.linkLast(newTask);
+        taskLinkedList.mapFastGet.put(newTask.getId(), taskLinkedList.last);
+    }
+
+    @Override
+    public void remove(long id) {
+        taskLinkedList.removeNode(taskLinkedList.mapFastGet.get(id));
     }
 
     @Override
     public List<Task> getHistory() {
-        return lastViewedTasks;
+        taskLinkedList.getTasks();
+        return taskLinkedList.finalLastViewedTasks;
     }
 }

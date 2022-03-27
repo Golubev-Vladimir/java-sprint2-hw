@@ -7,6 +7,8 @@ import service.Managers;
 import service.TaskManager;
 
 public class Main {
+    static String line = "---------------";
+
     public static void main(String[] args) {  //THIS CLASS WAS CREATED FOR TESTING APPLICATION
         TaskManager inMemoryTaskManager = Managers.getDefault();
         Counter counter = new Counter();
@@ -17,6 +19,9 @@ public class Main {
                 "Купить новую квартиру", "найти риелтора, выбрать нужный вариант", Status.DONE));
         inMemoryTaskManager.saveSubtask(new Subtask(counter.generateId(), epicBuyFlat.getId(),
                 "Зарегистрировать право собственности", "собрать все документы, передать документы в Росреестр",
+                Status.DONE));
+        inMemoryTaskManager.saveSubtask(new Subtask(counter.generateId(), epicBuyFlat.getId(),
+                "Рассчитаться с риелтором", "передать деньги",
                 Status.DONE));
 
         Epic epicRepairFlat = new Epic(counter.generateId(), "REPAIR FLAT");
@@ -40,45 +45,37 @@ public class Main {
         Epic epicStudy = new Epic(counter.generateId(), "Study");
         inMemoryTaskManager.saveEpic(epicStudy);
 
-        inMemoryTaskManager.updateEpic(new Epic(4, "Школа 21")); // тест
+        inMemoryTaskManager.updateEpic(new Epic(5, "Школа 21")); // тест обновление
 
-        System.out.println("---------------"); // тест
-        for (Task task : inMemoryTaskManager.getTasks().values()) {
-            System.out.println(task);
-        }
-        System.out.println("---------------");
+        inMemoryTaskManager.deleteEpicById(1); //тест удаление
+        inMemoryTaskManager.deleteTaskById(10);
 
-        for (Task task : inMemoryTaskManager.getEpics().values()) {
-            System.out.println(task);
-        }
-        System.out.println("---------------");
+        System.out.println(line); // тест печать всех задач
+        inMemoryTaskManager.getTasks().values().forEach(System.out::println);
+        System.out.println(line);
 
-        for (Task task : inMemoryTaskManager.getSubtasks().values()) {
-            System.out.println(task);
-        }
-        System.out.println("---------------");
+        inMemoryTaskManager.getEpics().values().forEach(System.out::println);
+        System.out.println(line);
 
-        inMemoryTaskManager.getEpicById(1); // тест
+        inMemoryTaskManager.getSubtasks().values().forEach(System.out::println);
+        System.out.println(line);
+
+        inMemoryTaskManager.getTaskById(9); //тест запрос истории
+        inMemoryTaskManager.getTaskById(10);
+        inMemoryTaskManager.getEpicById(1);
         inMemoryTaskManager.getSubtaskById(2);
         inMemoryTaskManager.getSubtaskById(3);
-        inMemoryTaskManager.getEpicById(4);
-        inMemoryTaskManager.getSubtaskById(5);
-        inMemoryTaskManager.getSubtaskById(6);
-        inMemoryTaskManager.getEpicById(7);
-        inMemoryTaskManager.getTaskById(8);
-        inMemoryTaskManager.getTaskById(9);
-        inMemoryTaskManager.getEpicById(10);
-        inMemoryTaskManager.getEpicById(11);
-        inMemoryTaskManager.getSubtaskById(3);
-        inMemoryTaskManager.getEpicById(4);
-        inMemoryTaskManager.getSubtaskById(5);
-        inMemoryTaskManager.getEpicById(10);
-        inMemoryTaskManager.getTaskById(8);
+        inMemoryTaskManager.getSubtaskById(4);
+        inMemoryTaskManager.getEpicById(8);
         inMemoryTaskManager.getSubtaskById(2);
+        inMemoryTaskManager.getEpicById(1);
+        inMemoryTaskManager.getSubtaskById(4);
 
-        for (Task task : inMemoryTaskManager.history()) {
+        for (Task task : inMemoryTaskManager.history()) { //тест печать id задач
             System.out.print(" " + task.getId() + " ");
         }
-        System.out.println("\n---------------");
+        System.out.println("\n" + line);
+        inMemoryTaskManager.history().forEach(System.out::println); //тест печать задач
+        System.out.println(line);
     }
 }
