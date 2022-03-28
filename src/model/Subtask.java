@@ -3,15 +3,15 @@ package model;
 import java.util.Objects;
 
 public class Subtask extends Task {
-    private final long epicId;
+    private final long taskEpicId;
 
-    public Subtask(long id, long epicId, String name, String description, Status status) {
-        super(id, name, description, status);
-        this.epicId = epicId;
+    public Subtask(long taskId, long taskEpicId, String taskName, String taskDescription, StatusTask taskStatus) {
+        super(taskId, taskName, taskDescription, taskStatus);
+        this.taskEpicId = taskEpicId;
     }
 
-    public long getEpicId() {
-        return epicId;
+    public long getTaskEpicId() {
+        return taskEpicId;
     }
 
     @Override
@@ -19,24 +19,24 @@ public class Subtask extends Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subtask otherSubtask = (Subtask) o;
-        return (epicId == otherSubtask.epicId)
-                && Objects.equals(getDescription(), otherSubtask.getDescription())
-                && Objects.equals(getStatus(), otherSubtask.getStatus())
-                && (getId() == otherSubtask.getId())
-                && Objects.equals(getName(), otherSubtask.getName());
+        return (taskEpicId == otherSubtask.taskEpicId)
+                && Objects.equals(getTaskDescription(), otherSubtask.getTaskDescription())
+                && Objects.equals(getTaskStatus(), otherSubtask.getTaskStatus())
+                && (getTaskId() == otherSubtask.getTaskId())
+                && Objects.equals(getTaskName(), otherSubtask.getTaskName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), epicId, getName(), getDescription(), getStatus());
+        return Objects.hash(getTaskId(), taskEpicId, getTaskName(), getTaskDescription(), getTaskStatus());
     }
 
     @Override
     public String toString() {
-        return "SubTask: " + getName() +
-                ". Описание: " + getDescription() +
-                ". УИН: " + getId() +
-                ". УИН Epic: " + getEpicId() +
-                ". Статус: " + getStatus();
+        return "SubTask: " + getTaskName() +
+                ". Описание: " + getTaskDescription() +
+                ". УИН: " + getTaskId() +
+                ". УИН Epic: " + getTaskEpicId() +
+                ". Статус: " + getTaskStatus();
     }
 }

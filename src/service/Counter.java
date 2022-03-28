@@ -1,9 +1,11 @@
 package service;
 
 public class Counter {
-    long id;
+    private static long id;
 
-    public long generateId() {
+    private Counter() {}
+
+    public static long generateId() {
         id++;
         return id;
     }

@@ -6,6 +6,7 @@ import model.Task;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface TaskManager {
     Map<Long, Task> getTasks();
@@ -16,11 +17,11 @@ public interface TaskManager {
 
     void deleteAllTasks();
 
-    Task getTaskById(long id);
+    Optional<Task> getTaskById(long id);
 
-    Task getEpicById(long id);
+    Optional<Epic> getEpicById(long id);
 
-    Task getSubtaskById(long id);
+    Optional<Subtask> getSubtaskById(long id);
 
     void saveTask(Task task);
 

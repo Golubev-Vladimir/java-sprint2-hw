@@ -1,48 +1,48 @@
 import model.Epic;
-import model.Status;
+import model.StatusTask;
 import model.Subtask;
 import model.Task;
-import service.Counter;
 import service.Managers;
 import service.TaskManager;
 
+import static service.Counter.generateId;
+
 public class Main {
-    static String line = "---------------";
+    static String line = "-".repeat(15);
 
     public static void main(String[] args) {  //THIS CLASS WAS CREATED FOR TESTING APPLICATION
         TaskManager inMemoryTaskManager = Managers.getDefault();
-        Counter counter = new Counter();
 
-        Epic epicBuyFlat = new Epic(counter.generateId(), "BUY FLAT");
+        Epic epicBuyFlat = new Epic(generateId(), "BUY FLAT");
         inMemoryTaskManager.saveEpic(epicBuyFlat);
-        inMemoryTaskManager.saveSubtask(new Subtask(counter.generateId(), epicBuyFlat.getId(),
-                "Купить новую квартиру", "найти риелтора, выбрать нужный вариант", Status.DONE));
-        inMemoryTaskManager.saveSubtask(new Subtask(counter.generateId(), epicBuyFlat.getId(),
+        inMemoryTaskManager.saveSubtask(new Subtask(generateId(), epicBuyFlat.getTaskId(),
+                "Купить новую квартиру", "найти риелтора, выбрать нужный вариант", StatusTask.DONE));
+        inMemoryTaskManager.saveSubtask(new Subtask(generateId(), epicBuyFlat.getTaskId(),
                 "Зарегистрировать право собственности", "собрать все документы, передать документы в Росреестр",
-                Status.DONE));
-        inMemoryTaskManager.saveSubtask(new Subtask(counter.generateId(), epicBuyFlat.getId(),
+                StatusTask.DONE));
+        inMemoryTaskManager.saveSubtask(new Subtask(generateId(), epicBuyFlat.getTaskId(),
                 "Рассчитаться с риелтором", "передать деньги",
-                Status.DONE));
+                StatusTask.DONE));
 
-        Epic epicRepairFlat = new Epic(counter.generateId(), "REPAIR FLAT");
+        Epic epicRepairFlat = new Epic(generateId(), "REPAIR FLAT");
         inMemoryTaskManager.saveEpic(epicRepairFlat);
-        inMemoryTaskManager.saveSubtask(new Subtask(counter.generateId(), epicRepairFlat.getId(),
-                "Найти прораба", "согласовать сроки, обсудить стоимость", Status.NEW));
-        inMemoryTaskManager.saveSubtask(new Subtask(counter.generateId(), epicRepairFlat.getId(),
-                "Купить материалы", "выбрать магазин, заказать доставку", Status.DONE));
+        inMemoryTaskManager.saveSubtask(new Subtask(generateId(), epicRepairFlat.getTaskId(),
+                "Найти прораба", "согласовать сроки, обсудить стоимость", StatusTask.NEW));
+        inMemoryTaskManager.saveSubtask(new Subtask(generateId(), epicRepairFlat.getTaskId(),
+                "Купить материалы", "выбрать магазин, заказать доставку", StatusTask.DONE));
 
-        Epic epicMove = new Epic(counter.generateId(), "MOVE");
+        Epic epicMove = new Epic(generateId(), "MOVE");
         inMemoryTaskManager.saveEpic(epicMove);
 
-        inMemoryTaskManager.saveTask(new Task(counter.generateId(), "Уборка",
-                "вытереть пыль, пропылесосить, Помыть пол", Status.DONE));
-        inMemoryTaskManager.saveTask(new Task(counter.generateId(), "Новоселье",
-                "купить шампанское, купить торт", Status.IN_PROGRESS));
+        inMemoryTaskManager.saveTask(new Task(generateId(), "Уборка",
+                "вытереть пыль, пропылесосить, Помыть пол", StatusTask.DONE));
+        inMemoryTaskManager.saveTask(new Task(generateId(), "Новоселье",
+                "купить шампанское, купить торт", StatusTask.IN_PROGRESS));
 
-        Epic epicHomework = new Epic(counter.generateId(), "Homework");
+        Epic epicHomework = new Epic(generateId(), "Homework");
         inMemoryTaskManager.saveEpic(epicHomework);
 
-        Epic epicStudy = new Epic(counter.generateId(), "Study");
+        Epic epicStudy = new Epic(generateId(), "Study");
         inMemoryTaskManager.saveEpic(epicStudy);
 
         inMemoryTaskManager.updateEpic(new Epic(5, "Школа 21")); // тест обновление
@@ -72,7 +72,7 @@ public class Main {
         inMemoryTaskManager.getSubtaskById(4);
 
         for (Task task : inMemoryTaskManager.history()) { //тест печать id задач
-            System.out.print(" " + task.getId() + " ");
+            System.out.print(" " + task.getTaskId() + " ");
         }
         System.out.println("\n" + line);
         inMemoryTaskManager.history().forEach(System.out::println); //тест печать задач

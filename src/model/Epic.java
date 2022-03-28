@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class Epic extends Task {
 
-    public Epic(long id, String name) {
-        super(id, name);
+    public Epic(long taskId, String taskName) {
+        super(taskId, taskName);
     }
 
     @Override
@@ -13,21 +13,21 @@ public class Epic extends Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Epic otherEpic = (Epic) o;
-        return (getId() == otherEpic.getId())
-                && Objects.equals(getDescription(), otherEpic.getDescription())
-                && Objects.equals(getStatus(), otherEpic.getStatus())
-                && Objects.equals(getName(), otherEpic.getName());
+        return (getTaskId() == otherEpic.getTaskId())
+                && Objects.equals(getTaskDescription(), otherEpic.getTaskDescription())
+                && Objects.equals(getTaskStatus(), otherEpic.getTaskStatus())
+                && Objects.equals(getTaskName(), otherEpic.getTaskName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getDescription(), getStatus());
+        return Objects.hash(getTaskId(), getTaskName(), getTaskDescription(), getTaskStatus());
     }
 
     @Override
     public String toString() {
-        return "Epic: " + getName() +
-                ". УИН: " + getId() +
-                ". Статус: " + getStatus();
+        return "Epic: " + getTaskName() +
+                ". УИН: " + getTaskId() +
+                ". Статус: " + getTaskStatus();
     }
 }

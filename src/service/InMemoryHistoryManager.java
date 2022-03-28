@@ -6,25 +6,25 @@ import model.TaskLinkedList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final TaskLinkedList<Task> taskLinkedList = new TaskLinkedList<>();
+    private final TaskLinkedList<Task> taskListHistory = new TaskLinkedList<>();
 
     @Override
     public void add(Task newTask) {
-        if (taskLinkedList.mapFastGet.containsKey(newTask.getId())) {
-            remove(newTask.getId());
+        if (taskListHistory.mapFastGet.containsKey(newTask.getTaskId())) {
+            remove(newTask.getTaskId());
         }
-        taskLinkedList.linkLast(newTask);
-        taskLinkedList.mapFastGet.put(newTask.getId(), taskLinkedList.last);
+        taskListHistory.linkLast(newTask);
+        taskListHistory.mapFastGet.put(newTask.getTaskId(), taskListHistory.last);
     }
 
     @Override
     public void remove(long id) {
-        taskLinkedList.removeNode(taskLinkedList.mapFastGet.get(id));
+        taskListHistory.removeNode(taskListHistory.mapFastGet.get(id));
     }
 
     @Override
     public List<Task> getHistory() {
-        taskLinkedList.getTasks();
-        return taskLinkedList.finalLastViewedTasks;
+        taskListHistory.getTasks();
+        return taskListHistory.finalLastViewedTasks;
     }
 }

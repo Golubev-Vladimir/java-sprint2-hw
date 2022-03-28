@@ -3,41 +3,41 @@ package model;
 import java.util.Objects;
 
 public class Task {
-    private final long id;
-    private final String name;
-    private String description;
-    private Status status;
+    protected final long taskId;
+    protected final String taskName;
+    protected String taskDescription;
+    protected StatusTask taskStatus;
 
-    public Task(long id, String name, String description, Status status) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.status = status;
+    public Task(long taskId, String taskName, String taskDescription, StatusTask taskStatus) {
+        this.taskId = taskId;
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.taskStatus = taskStatus;
     }
 
-    public Task(long id, String name) {
-        this.id = id;
-        this.name = name;
+    public Task(long taskId, String taskName) {
+        this.taskId = taskId;
+        this.taskName = taskName;
     }
 
-    public String getName() {
-        return name;
+    public String getTaskName() {
+        return taskName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTaskDescription() {
+        return taskDescription;
     }
 
-    public Status getStatus() {
-        return status;
+    public StatusTask getTaskStatus() {
+        return taskStatus;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setTaskStatus(StatusTask taskStatus) {
+        this.taskStatus = taskStatus;
     }
 
-    public long getId() {
-        return id;
+    public long getTaskId() {
+        return taskId;
     }
 
     @Override
@@ -45,22 +45,22 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task otherTask = (Task) o;
-        return (id == otherTask.id)
-                && Objects.equals(description, otherTask.description)
-                && Objects.equals(status, otherTask.status)
-                && Objects.equals(name, otherTask.name);
+        return (taskId == otherTask.taskId)
+                && Objects.equals(taskDescription, otherTask.taskDescription)
+                && Objects.equals(taskStatus, otherTask.taskStatus)
+                && Objects.equals(taskName, otherTask.taskName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, status);
+        return Objects.hash(taskId, taskName, taskDescription, taskStatus);
     }
 
     @Override
     public String toString() {
-        return "Task: " + getName() +
-                ". Описание: " + getDescription() +
-                ". УИН: " + getId() +
-                ". Статус: " + getStatus();
+        return "Task: " + getTaskName() +
+                ". Описание: " + getTaskDescription() +
+                ". УИН: " + getTaskId() +
+                ". Статус: " + getTaskStatus();
     }
 }
