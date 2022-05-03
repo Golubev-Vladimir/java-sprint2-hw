@@ -39,21 +39,24 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Optional<Task> getTaskById(long id) {
         Optional<Task> taskOptional = Optional.ofNullable(tasks.get(id));
-        taskOptional.ifPresent(inMemoryHistoryManager::add);
+        taskOptional.ifPresentOrElse(inMemoryHistoryManager::add,
+                () -> System.out.println("Такого элемента c id = " + id + " в коллекции Tasks нет"));
         return taskOptional;
     }
 
     @Override
     public Optional<Epic> getEpicById(long id) {
         Optional<Epic> epicOptional = Optional.ofNullable(epics.get(id));
-        epicOptional.ifPresent(inMemoryHistoryManager::add);
+        epicOptional.ifPresentOrElse(inMemoryHistoryManager::add,
+                () -> System.out.println("Такого элемента c id = " + id + " в коллекции Epic нет"));
         return epicOptional;
     }
 
     @Override
     public Optional<Subtask> getSubtaskById(long id) {
         Optional<Subtask> subtaskOptional = Optional.ofNullable(subtasks.get(id));
-        subtaskOptional.ifPresent(inMemoryHistoryManager::add);
+        subtaskOptional.ifPresentOrElse(inMemoryHistoryManager::add,
+                () -> System.out.println("Такого элемента c id = " + id + " в коллекции Subtask нет"));
         return subtaskOptional;
     }
 
@@ -128,7 +131,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteSubtaskById(long idDelete) {
+        long epicId = subtasks.get(idDelete).getTaskEpicId();
         subtasks.keySet().removeIf(id -> id == idDelete);
+        if (epics.containsKey(epicId)) {
+            updateEpicStatus(epicId);
+        }
     }
 
     @Override

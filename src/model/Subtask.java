@@ -33,10 +33,11 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "SubTask: " + getTaskName() +
-                ". Описание: " + getTaskDescription() +
-                ". УИН: " + getTaskId() +
-                ". УИН Epic: " + getTaskEpicId() +
-                ". Статус: " + getTaskStatus();
+        return + getTaskId() +
+                ",SUBTASK" + getTaskId() +
+                "," + getTaskName() +
+                "," + getTaskStatus() +
+                ","+ getTaskDescription() +
+                "," + getTaskEpicId();
     }
 }

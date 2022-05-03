@@ -15,9 +15,10 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
-    public Task(long taskId, String taskName) {
+    public Task(long taskId, String taskName, String taskDescription) {
         this.taskId = taskId;
         this.taskName = taskName;
+        this.taskDescription = taskDescription;
     }
 
     public String getTaskName() {
@@ -58,9 +59,10 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task: " + getTaskName() +
-                ". Описание: " + getTaskDescription() +
-                ". УИН: " + getTaskId() +
-                ". Статус: " + getTaskStatus();
+        return + getTaskId() +
+                ",TASK" + getTaskId() +
+                "," + getTaskName() +
+                "," + getTaskStatus() +
+                ","+ getTaskDescription();
     }
 }

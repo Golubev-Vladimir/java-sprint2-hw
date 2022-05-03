@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class Epic extends Task {
 
-    public Epic(long taskId, String taskName) {
-        super(taskId, taskName);
+    public Epic(long taskId, String taskName, String taskDescription) {
+        super(taskId, taskName, taskDescription);
     }
 
     @Override
@@ -26,8 +26,10 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "Epic: " + getTaskName() +
-                ". УИН: " + getTaskId() +
-                ". Статус: " + getTaskStatus();
+        return + getTaskId() +
+                ",EPIC" + getTaskId() +
+                "," + getTaskName() +
+                "," + getTaskStatus() +
+                ","+ getTaskDescription();
     }
 }
