@@ -44,4 +44,6 @@ public interface TaskManager {
     List<Subtask> getEpicSubtask(long epicId);
 
     List<Task> history();
+
+    long getLastId();
 }

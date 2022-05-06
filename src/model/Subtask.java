@@ -33,11 +33,11 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return + getTaskId() +
-                ",SUBTASK" + getTaskId() +
+        return getTaskId() +
+                "," + TypeTask.SUBTASK +
                 "," + getTaskName() +
                 "," + getTaskStatus() +
-                ","+ getTaskDescription() +
+                "," + getTaskDescription() +
                 "," + getTaskEpicId();
     }
 }

@@ -1,15 +1,14 @@
 package service;
 
-import java.io.IOException;
-
 public class Managers {
-    private Managers() {}
+    private Managers() {
+    }
 
     public static TaskManager getDefault() {
         return new InMemoryTaskManager();
     }
 
-    public static TaskManager getSaveFile(String pathFile) throws IOException {
+    public static TaskManager getSaveFile(String pathFile) {
         return new FileBackedTasksManager(pathFile);
     }
 

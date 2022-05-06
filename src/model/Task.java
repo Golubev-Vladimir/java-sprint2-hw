@@ -15,12 +15,6 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
-    public Task(long taskId, String taskName, String taskDescription) {
-        this.taskId = taskId;
-        this.taskName = taskName;
-        this.taskDescription = taskDescription;
-    }
-
     public String getTaskName() {
         return taskName;
     }
@@ -59,10 +53,10 @@ public class Task {
 
     @Override
     public String toString() {
-        return + getTaskId() +
-                ",TASK" + getTaskId() +
+        return getTaskId() +
+                "," + TypeTask.TASK +
                 "," + getTaskName() +
                 "," + getTaskStatus() +
-                ","+ getTaskDescription();
+                "," + getTaskDescription();
     }
 }

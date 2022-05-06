@@ -1,7 +1,10 @@
 package model;
 
 public enum StatusTask {
-    NEW,
-    IN_PROGRESS,
-    DONE
+    NEW("NEW"),
+    IN_PROGRESS("IN_PROGRESS"),
+    DONE("DONE");
+
+    StatusTask(String status) {
+    }
 }

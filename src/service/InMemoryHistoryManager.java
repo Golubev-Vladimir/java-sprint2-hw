@@ -6,7 +6,7 @@ import model.TaskLinkedList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final TaskLinkedList<Task> taskListHistory = new TaskLinkedList<>();
+    public final TaskLinkedList<Task> taskListHistory = new TaskLinkedList<>();
 
     @Override
     public void add(Task newTask) {

@@ -9,10 +9,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final Map<Long, Task> tasks = new HashMap<>();
-    private final Map<Long, Epic> epics = new HashMap<>();
-    private final Map<Long, Subtask> subtasks = new HashMap<>();
-    private final InMemoryHistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
+    protected final Map<Long, Task> tasks = new HashMap<>();
+    protected final Map<Long, Epic> epics = new HashMap<>();
+    protected final Map<Long, Subtask> subtasks = new HashMap<>();
+    protected static final InMemoryHistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
+    protected static final List<Task> allOldTasks = new ArrayList<>();
 
     @Override
     public Map<Long, Task> getTasks() {
@@ -68,7 +69,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void saveEpic(Epic epic) {
         epics.put(epic.getTaskId(), epic);
-        epic.setTaskStatus(StatusTask.NEW);
     }
 
     @Override
@@ -152,5 +152,20 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> history() {
         return inMemoryHistoryManager.getHistory();
+    }
+
+    @Override
+    public long getLastId() {
+        long max = 0;
+        try {
+            for (Task task : allOldTasks) {
+                if (task.getTaskId() > max) {
+                    max = task.getTaskId();
+                }
+            }
+            return max;
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }
