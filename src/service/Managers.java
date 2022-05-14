@@ -8,7 +8,7 @@ public class Managers {
         return new InMemoryTaskManager();
     }
 
-    public static TaskManager getSaveFile(String pathFile) {
+    public static TaskManager getFileBackedTasksManager(String pathFile) {
         return new FileBackedTasksManager(pathFile);
     }
 

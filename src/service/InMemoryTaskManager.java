@@ -8,12 +8,16 @@ import model.Task;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static service.Printer.print;
+
 public class InMemoryTaskManager implements TaskManager {
-    protected final Map<Long, Task> tasks = new HashMap<>();
-    protected final Map<Long, Epic> epics = new HashMap<>();
-    protected final Map<Long, Subtask> subtasks = new HashMap<>();
-    protected static final InMemoryHistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
-    protected static final List<Task> allOldTasks = new ArrayList<>();
+    protected static Map<Long, Task> tasks = new HashMap<>();
+    protected static Map<Long, Epic> epics = new HashMap<>();
+    protected static Map<Long, Subtask> subtasks = new HashMap<>();
+    protected static InMemoryHistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
+    protected static List<Task> allOldTasks = new ArrayList<>();
+
+    private static final String ERROR_GET_TASK = "Такого элемента c id = ";
 
     @Override
     public Map<Long, Task> getTasks() {
@@ -41,7 +45,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Optional<Task> getTaskById(long id) {
         Optional<Task> taskOptional = Optional.ofNullable(tasks.get(id));
         taskOptional.ifPresentOrElse(inMemoryHistoryManager::add,
-                () -> System.out.println("Такого элемента c id = " + id + " в коллекции Tasks нет"));
+                () -> print(ERROR_GET_TASK + id + " в коллекции Tasks нет"));
         return taskOptional;
     }
 
@@ -49,7 +53,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Optional<Epic> getEpicById(long id) {
         Optional<Epic> epicOptional = Optional.ofNullable(epics.get(id));
         epicOptional.ifPresentOrElse(inMemoryHistoryManager::add,
-                () -> System.out.println("Такого элемента c id = " + id + " в коллекции Epic нет"));
+                () -> print(ERROR_GET_TASK + id + " в коллекции Epic нет"));
         return epicOptional;
     }
 
@@ -57,7 +61,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Optional<Subtask> getSubtaskById(long id) {
         Optional<Subtask> subtaskOptional = Optional.ofNullable(subtasks.get(id));
         subtaskOptional.ifPresentOrElse(inMemoryHistoryManager::add,
-                () -> System.out.println("Такого элемента c id = " + id + " в коллекции Subtask нет"));
+                () -> print(ERROR_GET_TASK + id + " в коллекции Subtask нет"));
         return subtaskOptional;
     }
 
@@ -141,11 +145,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Subtask> getEpicSubtask(long epicId) {
         List<Subtask> listEpicSubtask = new ArrayList<>();
-        for (Subtask subtask : subtasks.values()) {
-            if (subtask.getTaskEpicId() == epicId) {
-                listEpicSubtask.add(subtask);
-            }
-        }
+        subtasks.values().stream().filter(subtask -> subtask.getTaskEpicId() == epicId).forEach(listEpicSubtask::add);
         return listEpicSubtask;
     }
 

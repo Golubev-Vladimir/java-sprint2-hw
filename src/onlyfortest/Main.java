@@ -1,16 +1,28 @@
-import model.Epic;
+package onlyfortest;
+
 import model.StatusTask;
-import model.Subtask;
 import model.Task;
 import service.Managers;
 import service.TaskManager;
 
 import static service.Counter.generateId;
+import static service.Printer.print;
 
 public class Main {
+    static final String CAT_SUCCESS = (" ,_     _\n" +
+            " |\\\\_,-~/\n" +
+            " / _  _ |    ,--.\n" +
+            "(  @  @ )   / ,-'\n" +
+            " \\  _T_/-._( (\n" +
+            " /         `. \\\n" +
+            "|         _  \\ |\n" +
+            " \\ \\ ,  /      |\n" +
+            "  || |-_\\__   /\n" +
+            " ((_/`(____,-'\n" +
+            "Успех!");
 
     public static void main(String[] args) {  //THIS CLASS WAS CREATED FOR TESTING APPLICATION
-        TaskManager fileBackedTasksManager = Managers.getSaveFile("fileTasks.csv");
+        TaskManager fileBackedTasksManager = Managers.getFileBackedTasksManager("fileTasks.csv");
         fileBackedTasksManager.saveTask(new Task(fileBackedTasksManager.getLastId() + generateId(),
                 "Сдать ТЗ-5", "Придется немного поработать", StatusTask.IN_PROGRESS));
 
@@ -18,7 +30,7 @@ public class Main {
         fileBackedTasksManager.getTaskById(13);
         fileBackedTasksManager.getSubtaskById(5);
         fileBackedTasksManager.history();
-        System.out.println("Hello");
+        print(CAT_SUCCESS);
 
         /*fileBackedTasksManager.saveTask(new Task(generateId(), "Уборка",
                 "вытереть пыль; пропылесосить; Помыть пол", StatusTask.DONE));
