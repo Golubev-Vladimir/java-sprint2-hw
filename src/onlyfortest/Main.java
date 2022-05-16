@@ -30,6 +30,8 @@ public class Main {
         fileBackedTasksManager.getTaskById(13);
         fileBackedTasksManager.getSubtaskById(5);
         fileBackedTasksManager.history();
+        fileBackedTasksManager.getEpicSubtask(3).forEach(System.out::println);
+
         print(CAT_SUCCESS);
 
         /*fileBackedTasksManager.saveTask(new Task(generateId(), "Уборка",

@@ -2,8 +2,8 @@ package service;
 
 import model.*;
 
-import static service.Handler.fileParseForLoadHistory;
 import static service.Handler.fileParseForLoadTasks;
+import static service.Handler.split;
 import static service.InMemoryTaskManager.*;
 import static service.Printer.print;
 
@@ -15,15 +15,13 @@ public class FileBackedTasksManagerLoader {
     private static final int DESCRIPTION_COLUMN_INDEX = 4;
     private static final int EPIC_COLUMN_INDEX = 5;
 
-    private static Task oldTask;
-
     private FileBackedTasksManagerLoader() {
     }
 
     static void loadTaskAndHistoryFromFile(String value) {
         String[] linesFile = fileParseForLoadTasks(value); //парсим единожды для экономии ресурсов
         for (int i = 1; i < linesFile.length - 1; i++) { //не берем первую (шапку) и последнюю (история) строки,экономим
-            String[] taskStringLine = linesFile[i].split(Handler.SPLITTER);
+            String[] taskStringLine = split(linesFile[i]);
             if (!linesFile[i].isBlank() && !linesFile[i].isEmpty()) { //отметаем пустые строки
                 try {
                     switch (TypeTask.valueOf(taskStringLine[TYPE_COLUMN_INDEX])) {
@@ -40,16 +38,17 @@ public class FileBackedTasksManagerLoader {
                             break;
                     }
                 } catch (RuntimeException e) { // подстраховываемся
-                    print("Необработанная строка: <".toUpperCase() + linesFile[i]
-                            + ">. Проверьте корректность параметров".toUpperCase());
+                    print("Необработанная строка: <" + linesFile[i]
+                            + ">. Проверьте корректность параметров");
                 }
             }
         }
-        loadHistoryFromString(value);
+        loadHistoryFromString(linesFile);
     }
 
-    static void loadHistoryFromString(String value) {
-        for (String items : fileParseForLoadHistory(value)) {
+    static void loadHistoryFromString(String[] linesFile) {
+        String[] historyStringLine = split(linesFile[linesFile.length - 1]);
+        for (String items : historyStringLine) {
             for (Task task : allOldTasks) {
                 if (task.getTaskId() == Long.parseLong(items)) {
                     inMemoryHistoryManager.add(task);
@@ -59,30 +58,30 @@ public class FileBackedTasksManagerLoader {
     }
 
     static void createTaskFromHistory(String[] taskStringLine) {
+        Task oldTask;
         oldTask = new Task(Long.parseLong(taskStringLine[ID_COLUMN_INDEX]),
                 taskStringLine[NAME_COLUMN_INDEX], taskStringLine[DESCRIPTION_COLUMN_INDEX],
                 StatusTask.valueOf(taskStringLine[STATUS_COLUMN_INDEX]));
         tasks.put(oldTask.getTaskId(), oldTask);
         allOldTasks.add(oldTask);
-        oldTask = null;
     }
 
     static void createEpicFromHistory(String[] taskStringLine) {
+        Epic oldTask;
         oldTask = new Epic(Long.parseLong(taskStringLine[ID_COLUMN_INDEX]),
                 taskStringLine[NAME_COLUMN_INDEX], taskStringLine[DESCRIPTION_COLUMN_INDEX],
                 StatusTask.valueOf(taskStringLine[STATUS_COLUMN_INDEX]));
-        epics.put(oldTask.getTaskId(), (Epic) oldTask);
+        epics.put(oldTask.getTaskId(), oldTask);
         allOldTasks.add(oldTask);
-        oldTask = null;
     }
 
     static void createSubtaskFromHistory(String[] taskStringLine) {
+        Subtask oldTask;
         oldTask = new Subtask(Long.parseLong(taskStringLine[ID_COLUMN_INDEX]),
                 Long.parseLong(taskStringLine[EPIC_COLUMN_INDEX]), taskStringLine[NAME_COLUMN_INDEX],
                 taskStringLine[DESCRIPTION_COLUMN_INDEX],
                 StatusTask.valueOf(taskStringLine[STATUS_COLUMN_INDEX]));
-        subtasks.put(oldTask.getTaskId(), (Subtask) oldTask);
+        subtasks.put(oldTask.getTaskId(), oldTask);
         allOldTasks.add(oldTask);
-        oldTask = null;
     }
 }
