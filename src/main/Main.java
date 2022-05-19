@@ -1,12 +1,13 @@
-package onlyfortest;
+package main;
 
+import model.Epic;
 import model.StatusTask;
-import model.Task;
+import model.Subtask;
 import service.Managers;
 import service.TaskManager;
 
 import static service.Counter.generateId;
-import static service.Printer.print;
+import static service.Printer.println;
 
 public class Main {
     static final String CAT_SUCCESS = (" ,_     _\n" +
@@ -23,8 +24,13 @@ public class Main {
 
     public static void main(String[] args) {  //THIS CLASS WAS CREATED FOR TESTING APPLICATION
         TaskManager fileBackedTasksManager = Managers.getFileBackedTasksManager("fileTasks.csv");
-        fileBackedTasksManager.saveTask(new Task(fileBackedTasksManager.getLastId() + generateId(),
-                "Сдать ТЗ-5", "Придется немного поработать", StatusTask.IN_PROGRESS));
+        Epic epicTE = new Epic(fileBackedTasksManager.getIdLastTask() + generateId(),
+                "Сдать ТЗ-5", "Придется немного поработать", StatusTask.NEW);
+        fileBackedTasksManager.saveEpic(epicTE);
+        fileBackedTasksManager.saveSubtask(new Subtask(fileBackedTasksManager.getIdLastTask() + generateId(),
+                epicTE.getTaskId(), "История просмотра", "Сериализация", StatusTask.IN_PROGRESS));
+        fileBackedTasksManager.saveSubtask(new Subtask(fileBackedTasksManager.getIdLastTask() + generateId(),
+                epicTE.getTaskId(), "Запись в файл", "Запис и чтение", StatusTask.IN_PROGRESS));
 
         fileBackedTasksManager.getEpicById(7);
         fileBackedTasksManager.getTaskById(13);
@@ -32,7 +38,7 @@ public class Main {
         fileBackedTasksManager.history();
         fileBackedTasksManager.getEpicSubtask(3).forEach(System.out::println);
 
-        print(CAT_SUCCESS);
+        println(CAT_SUCCESS);
 
         /*fileBackedTasksManager.saveTask(new Task(generateId(), "Уборка",
                 "вытереть пыль; пропылесосить; Помыть пол", StatusTask.DONE));

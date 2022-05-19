@@ -5,7 +5,7 @@ public class Printer {
 
     }
 
-    public static void print(String massage) {
+    public static void println(String massage) {
         System.out.println(massage);
     }
 }

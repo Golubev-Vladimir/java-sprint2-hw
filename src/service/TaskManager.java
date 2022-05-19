@@ -45,5 +45,5 @@ public interface TaskManager {
 
     List<Task> history();
 
-    long getLastId();
+    long getIdLastTask();
 }

@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import static service.FileBackedTasksManagerLoader.loadTaskAndHistoryFromFile;
-import static service.Printer.print;
+import static service.Printer.println;
 
 import model.*;
 
@@ -88,7 +88,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public Optional<Task> getTaskById(long id) {
         Optional<Task> taskOptional = Optional.ofNullable(tasks.get(id));
         taskOptional.ifPresentOrElse(inMemoryHistoryManager::add,
-                () -> print("Такой task c id = " + id + " в списке Tasks нет"));
+                () -> println("Такой task c id = " + id + " в списке Tasks нет"));
         save();
         return taskOptional;
     }
@@ -97,7 +97,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public Optional<Epic> getEpicById(long id) {
         Optional<Epic> epicOptional = Optional.ofNullable(epics.get(id));
         epicOptional.ifPresentOrElse(inMemoryHistoryManager::add,
-                () -> print("Такого epic c id = " + id + " в списке Epic нет"));
+                () -> println("Такого epic c id = " + id + " в списке Epic нет"));
         save();
         return epicOptional;
     }
@@ -106,7 +106,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public Optional<Subtask> getSubtaskById(long id) {
         Optional<Subtask> subtaskOptional = Optional.ofNullable(subtasks.get(id));
         subtaskOptional.ifPresentOrElse(inMemoryHistoryManager::add,
-                () -> print("Такого subtask c id = " + id + " в списке Subtask нет"));
+                () -> println("Такого subtask c id = " + id + " в списке Subtask нет"));
         save();
         return subtaskOptional;
     }
@@ -117,20 +117,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 throw new ManagerSaveException("Ошибка записи в файл: " + pathFile);
             }
             writeFileTasksHistory.write("id,type,name,status,description,epic" + Handler.TASK_LINE_DELIMITER);
-            for (Task task : getTasks().values()) {
+            for (Task task : allTasks) {
                 writeFileTasksHistory.write(task + Handler.TASK_LINE_DELIMITER);
-            }
-            for (Epic epic : getEpics().values()) {
-                writeFileTasksHistory.write(epic + Handler.TASK_LINE_DELIMITER);
-            }
-            for (Subtask subtask : getSubtasks().values()) {
-                writeFileTasksHistory.write(subtask + Handler.TASK_LINE_DELIMITER);
             }
             writeFileTasksHistory.write(Handler.TASK_LINE_DELIMITER);
             writeFileTasksHistory.write(putHistoryToString(inMemoryHistoryManager));
 
         } catch (ManagerSaveException | IOException e) {
-            print(e.getMessage());
+            println(e.getMessage());
         }
     }
 

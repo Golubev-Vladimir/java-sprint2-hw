@@ -19,7 +19,7 @@ public class Handler {
         }
     }
 
-    public static String[] split(String value) {
+    public static String[] splitComma(String value) {
         return value.split(SPLITTER);
     }
 }
