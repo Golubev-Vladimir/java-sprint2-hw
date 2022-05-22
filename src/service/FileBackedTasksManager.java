@@ -19,12 +19,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void deleteAllTasks() {
-        super.deleteAllTasks();
-        save();
-    }
-
-    @Override
     public void saveTask(Task task) {
         super.saveTask(task);
         save();
@@ -85,6 +79,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
+    public void deleteAllTasks() {
+        super.deleteAllTasks();
+        save();
+    }
+
+    @Override
     public Optional<Task> getTaskById(long id) {
         Optional<Task> taskOptional = Optional.ofNullable(tasks.get(id));
         taskOptional.ifPresentOrElse(inMemoryHistoryManager::add,
@@ -112,22 +112,25 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     private void save() {
-        try (FileWriter writeFileTasksHistory = new FileWriter(pathFile, StandardCharsets.UTF_8)) {
+        try {
             if (pathFile == null) {
-                throw new ManagerSaveException("Ошибка записи в файл: " + pathFile);
+                throw new ManagerSaveException("Не доступа к файлу для записи данных: ", pathFile);
             }
-            writeFileTasksHistory.write("id,type,name,status,description,epic" + Handler.TASK_LINE_DELIMITER);
+        } catch (ManagerSaveException exception) {
+            println(exception.getDetailMessage());
+        }
+        try (FileWriter writeFileTasksHistory = new FileWriter(pathFile, StandardCharsets.UTF_8)) {
+            writeFileTasksHistory.write(
+                    "id,type,name,status,description, startTime, endTime, epic" + Handler.TASK_LINE_DELIMITER);
             for (Task task : allTasks) {
                 writeFileTasksHistory.write(task + Handler.TASK_LINE_DELIMITER);
             }
             writeFileTasksHistory.write(Handler.TASK_LINE_DELIMITER);
             writeFileTasksHistory.write(putHistoryToString(inMemoryHistoryManager));
-
-        } catch (ManagerSaveException | IOException e) {
-            println(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-
     private String putHistoryToString(HistoryManager manager) {
         StringBuilder historyViewedTasks = new StringBuilder();
         for (Task task : manager.getHistory()) {

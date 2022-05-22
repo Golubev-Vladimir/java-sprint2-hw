@@ -7,6 +7,7 @@ import model.Task;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public interface TaskManager {
     Map<Long, Task> getTasks();
@@ -41,9 +42,13 @@ public interface TaskManager {
 
     void deleteSubtaskById(long idDelete);
 
-    List<Subtask> getEpicSubtask(long epicId);
+    Set<Subtask> getEpicSubtask(long epicId);
 
     List<Task> history();
 
     long getIdLastTask();
+
+    void findMaxIdTask();
+
+    Set<Task> getAllTasks();
 }

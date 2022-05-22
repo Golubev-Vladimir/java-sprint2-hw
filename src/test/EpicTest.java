@@ -1,79 +1,65 @@
 package test;
 
-import model.Epic;
 import model.StatusTask;
-import model.Subtask;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.Managers;
 import service.TaskManager;
 
-import static service.Counter.generateId;
+import static test.DataClassForAllTestClasses.*;
 
 class EpicTest {
-    Epic epic;
-    Subtask subtask;
-
-    static final String EPIC_NAME = "Яндекс-Практикум";
-    static final String EPIC_DESCRIPTION = "Сдать ТЗ-6";
-    static final String SUBTASK_NAME_ONE = "JUnit5";
-    static final String SUBTASK_NAME_TWO = "TimePriority";
-    static final String SUBTASK_DESCRIPTION_ONE = "Протестировать трекер задач";
-    static final String SUBTASK_DESCRIPTION_TWO = "Добавить функцию - расставлять задачи по приоритетам";
-
-    TaskManager inMemoryTaskManager = Managers.getDefault();
-
-    private void createEpic() {
-        epic = new Epic(generateId(), EPIC_NAME, EPIC_DESCRIPTION, StatusTask.IN_PROGRESS);
-        inMemoryTaskManager.saveEpic(epic);
-    }
-
-    private void createSubtask(StatusTask status, Epic epic, String subtaskName, String subtaskDescription) {
-        subtask = new Subtask(generateId(), epic.getTaskId(), subtaskName, subtaskDescription, status);
-        inMemoryTaskManager.saveSubtask(subtask);
-    }
+    TaskManager inMemoryTaskManagerEpicTest;
 
     @BeforeEach
     public void beforeEach() {
-        createEpic();
+        inMemoryTaskManagerEpicTest = Managers.getDefault();
+    }
+
+    @AfterEach
+    public void afterEach() {
+        inMemoryTaskManagerEpicTest.deleteAllTasks();
+        inMemoryTaskManagerEpicTest = null;
     }
 
     @Test
     public void shouldStatusEpicIsInProgressWithoutSubtasks() {
-        Assertions.assertEquals(StatusTask.IN_PROGRESS, inMemoryTaskManager.getEpics().get(epic.getTaskId())
-                .getTaskStatus());
+        inMemoryTaskManagerEpicTest.saveEpic(createEpicOne(StatusTask.IN_PROGRESS));
+        Assertions.assertEquals(StatusTask.IN_PROGRESS, inMemoryTaskManagerEpicTest.getEpics()
+                .get(ID_EPIC_ONE).getTaskStatus());
     }
 
     @Test
     public void shouldStatusEpicIsNewWithSubtasksWithStatusNew() {
-        createSubtask(StatusTask.NEW, epic, SUBTASK_NAME_ONE, SUBTASK_DESCRIPTION_ONE);
-        createSubtask(StatusTask.NEW, epic, SUBTASK_NAME_TWO, SUBTASK_DESCRIPTION_TWO);
-        Assertions.assertEquals(StatusTask.NEW, inMemoryTaskManager.getEpics().get(epic.getTaskId())
-                .getTaskStatus());
+        inMemoryTaskManagerEpicTest.saveEpic(createEpicTwo(StatusTask.DONE));
+        inMemoryTaskManagerEpicTest.saveSubtask(createSubtaskOne(StatusTask.NEW));
+        inMemoryTaskManagerEpicTest.saveSubtask(createSubtaskTwo(StatusTask.NEW));
+        Assertions.assertEquals(StatusTask.NEW, inMemoryTaskManagerEpicTest.getEpics().get(ID_EPIC_TWO).getTaskStatus());
     }
 
     @Test
     public void shouldStatusEpicIsDoneWithSubtasksStatusDone() {
-        createSubtask(StatusTask.DONE, epic, SUBTASK_NAME_ONE, SUBTASK_DESCRIPTION_ONE);
-        createSubtask(StatusTask.DONE, epic, SUBTASK_NAME_TWO, SUBTASK_DESCRIPTION_TWO);
-        Assertions.assertEquals(StatusTask.DONE, inMemoryTaskManager.getEpics().get(epic.getTaskId())
-                .getTaskStatus());
+        inMemoryTaskManagerEpicTest.saveEpic(createEpicTwo(StatusTask.NEW));
+        inMemoryTaskManagerEpicTest.saveSubtask(createSubtaskOne(StatusTask.DONE));
+        inMemoryTaskManagerEpicTest.saveSubtask(createSubtaskTwo(StatusTask.DONE));
+        Assertions.assertEquals(StatusTask.DONE, inMemoryTaskManagerEpicTest.getEpics().get(ID_EPIC_TWO).getTaskStatus());
     }
 
     @Test
     public void shouldStatusEpicIsInProgressWithSubtasksStatusNewAndDone() {
-        createSubtask(StatusTask.NEW, epic, SUBTASK_NAME_ONE, SUBTASK_DESCRIPTION_ONE);
-        createSubtask(StatusTask.DONE, epic, SUBTASK_NAME_TWO, SUBTASK_DESCRIPTION_TWO);
-        Assertions.assertEquals(StatusTask.IN_PROGRESS, inMemoryTaskManager.getEpics().get(epic.getTaskId())
-                .getTaskStatus());
+        inMemoryTaskManagerEpicTest.saveEpic(createEpicTwo(StatusTask.NEW));
+        inMemoryTaskManagerEpicTest.saveSubtask(createSubtaskOne(StatusTask.NEW));
+        inMemoryTaskManagerEpicTest.saveSubtask(createSubtaskTwo(StatusTask.DONE));
+        Assertions.assertEquals(StatusTask.IN_PROGRESS, inMemoryTaskManagerEpicTest.getEpics().get(ID_EPIC_TWO).getTaskStatus());
     }
 
     @Test
-    public void shouldStatusEpicIsNewWithSubtasksWithStatusInProgress() {
-        createSubtask(StatusTask.IN_PROGRESS, epic, SUBTASK_NAME_ONE, SUBTASK_DESCRIPTION_ONE);
-        createSubtask(StatusTask.IN_PROGRESS, epic, SUBTASK_NAME_TWO, SUBTASK_DESCRIPTION_TWO);
-        Assertions.assertEquals(StatusTask.IN_PROGRESS, inMemoryTaskManager.getEpics().get(epic.getTaskId())
-                .getTaskStatus());
+    public void shouldStatusEpicIsInProgressWithSubtasksWithStatusInProgress() {
+        inMemoryTaskManagerEpicTest.saveEpic(createEpicTwo(StatusTask.NEW));
+        inMemoryTaskManagerEpicTest.saveSubtask(createSubtaskOne(StatusTask.IN_PROGRESS));
+        inMemoryTaskManagerEpicTest.saveSubtask(createSubtaskTwo(StatusTask.IN_PROGRESS));
+        Assertions.assertEquals(StatusTask.IN_PROGRESS, inMemoryTaskManagerEpicTest.getEpics().get(ID_EPIC_TWO).getTaskStatus());
     }
 }

@@ -1,7 +1,13 @@
 package model;
 
 public class ManagerSaveException extends Exception {
-    public ManagerSaveException(String message) {
+    private final String pathFile;
+    public ManagerSaveException(final String message, final String pathFile) {
         super(message);
+        this.pathFile = pathFile;
+    }
+
+    public String getDetailMessage() {
+        return getMessage() + pathFile;
     }
 }
