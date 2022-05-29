@@ -1,4 +1,4 @@
-package service;
+package main.service;
 
 public class Managers {
     private Managers() {
@@ -8,7 +8,7 @@ public class Managers {
         return new InMemoryTaskManager();
     }
 
-    public static TaskManager getFileBackedTasksManager(String pathFile) {
+    public static FileBackedTasksManager getFileBackedTasksManager(String pathFile) {
         return new FileBackedTasksManager(pathFile);
     }
 

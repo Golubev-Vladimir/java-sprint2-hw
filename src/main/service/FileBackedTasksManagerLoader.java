@@ -1,15 +1,14 @@
-package service;
+package main.service;
 
-import model.*;
+import main.model.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static service.Handler.fileParseForLoadTasks;
-import static service.Handler.splitComma;
-import static service.InMemoryTaskManager.*;
-import static service.Printer.println;
+import static main.service.Handler.fileParseForLoadTasks;
+import static main.service.Handler.splitComma;
+import static main.service.Printer.println;
 
 public class FileBackedTasksManagerLoader {
     private static final int ID_COLUMN_INDEX = 0;
@@ -51,9 +50,9 @@ public class FileBackedTasksManagerLoader {
             String[] historyStringLine = splitComma(linesFile[linesFile.length - 1]);
             for (String items : historyStringLine) {
                 long idTask = Long.parseLong(items);
-                allTasks.stream().filter(task -> task.getTaskId() == idTask).forEach(inMemoryHistoryManager::add);
-                if (idTask > idLastTask) {
-                    idLastTask = idTask;
+                InMemoryTaskManager.allTasks.stream().filter(task -> task.getTaskId() == idTask).forEach(InMemoryTaskManager.inMemoryHistoryManager::add);
+                if (idTask > InMemoryTaskManager.idLastTask) {
+                    InMemoryTaskManager.idLastTask = idTask;
                 }
             }
         } catch (RuntimeException e) {
@@ -70,8 +69,8 @@ public class FileBackedTasksManagerLoader {
                 LocalDateTime.parse(taskStringLine[START_TIME_COLUMN_INDEX], TASK_TIME_FORMAT),
                 Duration.between(LocalDateTime.parse(taskStringLine[START_TIME_COLUMN_INDEX], TASK_TIME_FORMAT),
                         LocalDateTime.parse(taskStringLine[END_TIME_COLUMN_INDEX], TASK_TIME_FORMAT)).toMinutes());
-        tasks.put(oldTask.getTaskId(), oldTask);
-        allTasks.add(oldTask);
+        InMemoryTaskManager.tasks.put(oldTask.getTaskId(), oldTask);
+        InMemoryTaskManager.allTasks.add(oldTask);
     }
 
     static void createEpicFromHistory(String[] taskStringLine) {
@@ -83,8 +82,8 @@ public class FileBackedTasksManagerLoader {
                 LocalDateTime.parse(taskStringLine[START_TIME_COLUMN_INDEX], TASK_TIME_FORMAT),
                 Duration.between(LocalDateTime.parse(taskStringLine[START_TIME_COLUMN_INDEX], TASK_TIME_FORMAT),
                         LocalDateTime.parse(taskStringLine[END_TIME_COLUMN_INDEX], TASK_TIME_FORMAT)).toMinutes());
-        epics.put(oldTask.getTaskId(), oldTask);
-        allTasks.add(oldTask);
+        InMemoryTaskManager.epics.put(oldTask.getTaskId(), oldTask);
+        InMemoryTaskManager.allTasks.add(oldTask);
     }
 
     static void createSubtaskFromHistory(String[] taskStringLine) {
@@ -97,7 +96,7 @@ public class FileBackedTasksManagerLoader {
                 LocalDateTime.parse(taskStringLine[START_TIME_COLUMN_INDEX], TASK_TIME_FORMAT),
                 Duration.between(LocalDateTime.parse(taskStringLine[START_TIME_COLUMN_INDEX], TASK_TIME_FORMAT),
                         LocalDateTime.parse(taskStringLine[END_TIME_COLUMN_INDEX], TASK_TIME_FORMAT)).toMinutes());
-        subtasks.put(oldTask.getTaskId(), oldTask);
-        allTasks.add(oldTask);
+        InMemoryTaskManager.subtasks.put(oldTask.getTaskId(), oldTask);
+        InMemoryTaskManager.allTasks.add(oldTask);
     }
 }

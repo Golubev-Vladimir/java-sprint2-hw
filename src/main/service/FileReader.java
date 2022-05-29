@@ -1,12 +1,12 @@
-package service;
+package main.service;
 
-import model.ManagerLoadException;
+import main.model.ManagerLoadException;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static service.Printer.println;
+import static main.service.Printer.println;
 
 public class FileReader {
 

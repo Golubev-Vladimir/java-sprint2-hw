@@ -1,4 +1,4 @@
-package service;
+package main.service;
 
 public class Counter {
     private static long i;

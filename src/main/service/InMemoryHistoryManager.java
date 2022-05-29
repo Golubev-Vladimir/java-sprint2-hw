@@ -1,7 +1,7 @@
-package service;
+package main.service;
 
-import model.Task;
-import model.TaskLinkedList;
+import main.model.Task;
+import main.model.TaskLinkedList;
 
 import java.util.List;
 
@@ -10,16 +10,16 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task newTask) {
-        if (taskListHistory.mapFastGet.containsKey(newTask.getTaskId())) {
-            remove(newTask.getTaskId());
-        }
+        remove(newTask.getTaskId());
         taskListHistory.linkLast(newTask);
         taskListHistory.mapFastGet.put(newTask.getTaskId(), taskListHistory.last);
     }
 
     @Override
     public void remove(long id) {
-        taskListHistory.removeNode(taskListHistory.mapFastGet.get(id));
+        if (taskListHistory.mapFastGet.containsKey(id)) {
+            taskListHistory.removeNode(taskListHistory.mapFastGet.get(id));
+        }
     }
 
     @Override

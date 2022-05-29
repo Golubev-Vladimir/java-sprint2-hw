@@ -1,10 +1,10 @@
-package model;
+package main.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import static model.TypeTask.SUBTASK;
-import static service.FileBackedTasksManagerLoader.TASK_TIME_FORMAT;
+import static main.model.TypeTask.SUBTASK;
+import static main.service.FileBackedTasksManagerLoader.TASK_TIME_FORMAT;
 
 public class Subtask extends Task {
     private final long taskEpicId;

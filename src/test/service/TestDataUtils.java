@@ -1,15 +1,20 @@
-package test;
+package test.service;
 
-import model.Epic;
-import model.StatusTask;
-import model.Subtask;
-import model.Task;
+import main.model.Epic;
+import main.model.StatusTask;
+import main.model.Subtask;
+import main.model.Task;
+import main.service.Managers;
+import main.service.TaskManager;
 
 import java.time.LocalDateTime;
 
-public class DataClassForAllTestClasses {
+import static main.model.StatusTask.IN_PROGRESS;
+import static main.model.StatusTask.NEW;
 
-    private DataClassForAllTestClasses() {
+public class TestDataUtils {
+
+    private TestDataUtils() {
     }
 
     static final String TASK_NAME_ONE = "TaskName1";
@@ -34,29 +39,31 @@ public class DataClassForAllTestClasses {
 
     static final long ID_TASK_ONE = 1;
     static final long ID_TASK_TWO = 2;
-    static final long ID_EPIC_ONE = 3;
-    static final long ID_EPIC_TWO = 4;
+    public static final long ID_EPIC_ONE = 3;
+    public static final long ID_EPIC_TWO = 4;
     static final long ID_SUBTASK_ONE = 5;
     static final long ID_SUBTASK_TWO = 6;
 
-    static final LocalDateTime START_TIME_TASK_ONE = LocalDateTime.of (2022, 5, 21, 10, 20);
-    static final LocalDateTime START_TIME_TASK_TWO = LocalDateTime.of (2022, 5, 22, 11, 0);
-    static final LocalDateTime START_TIME_TASK_UPDATE = LocalDateTime.of (2022, 6, 10, 12, 5);
-    static final LocalDateTime START_TIME_EPIC_ONE = LocalDateTime.of (2022, 5, 21, 12, 10);
-    static final LocalDateTime START_TIME_EPIC_TWO = LocalDateTime.of (2022, 5, 21, 14, 0);
-    static final LocalDateTime START_TIME_EPIC_UPDATE = LocalDateTime.of (2022, 7, 15, 9, 15);
-    static final LocalDateTime START_TIME_SUBTASK_ONE = LocalDateTime.of (2022, 5, 21, 13, 0);
-    static final LocalDateTime START_TIME_SUBTASK_TWO = LocalDateTime.of (2022, 5, 21, 15, 0);
-    static final LocalDateTime START_TIME_SUBTASK_UPDATE = LocalDateTime.of (2022, 6, 11, 22, 30);
+    static final LocalDateTime START_TIME_TASK_ONE =       LocalDateTime.of(2022, 5, 21, 10, 20);
+    static final LocalDateTime START_TIME_TASK_TWO =       LocalDateTime.of(2022, 5, 21, 11, 20);
+    static final LocalDateTime START_TIME_EPIC_ONE =       LocalDateTime.of(2022, 5, 21, 13, 20);
+    static final LocalDateTime START_TIME_EPIC_TWO =       LocalDateTime.of(2022, 5, 21, 14,  0);
+    static final LocalDateTime START_TIME_SUBTASK_ONE =    LocalDateTime.of(2022, 5, 21, 16,  0);
+    static final LocalDateTime START_TIME_SUBTASK_TWO =    LocalDateTime.of(2022, 5, 21, 19, 20);
+
+    static final LocalDateTime START_TIME_TASK_UPDATE =    LocalDateTime.of(2022, 5, 21, 10, 20);
+    static final LocalDateTime START_TIME_EPIC_UPDATE =    LocalDateTime.of(2022, 5, 21, 13, 20);
+    static final LocalDateTime START_TIME_SUBTASK_UPDATE = LocalDateTime.of(2022, 5, 21, 16,  0);
 
     static final int DURATION_TASK_ONE = 60;
     static final int DURATION_TASK_TWO = 120;
-    static final int DURATION_TASK_UPDATE = 80;
     static final int DURATION_EPIC_ONE = 40;
-    static final int DURATION_EPIC_TWO = 1000;
-    static final int DURATION_EPIC_UPDATE = 150;
+    static final int DURATION_EPIC_TWO = 120;
     static final int DURATION_SUBTASK_ONE = 200;
-    static final int DURATION_SUBTASK_TWO = 300;
+    static final int DURATION_SUBTASK_TWO = 150;
+
+    static final int DURATION_TASK_UPDATE = 80;
+    static final int DURATION_EPIC_UPDATE = 150;
     static final int DURATION_SUBTASK_UPDATE = 450;
 
     static final String TASK_NOT_FOUND = "Задача не найдена.";
@@ -99,7 +106,7 @@ public class DataClassForAllTestClasses {
                 DURATION_TASK_UPDATE);
     }
 
-    static Epic createEpicOne(StatusTask statusTask) {
+    public static Epic createEpicOne(StatusTask statusTask) {
         return new Epic(
                 ID_EPIC_ONE,
                 EPIC_NAME_ONE,
@@ -109,7 +116,7 @@ public class DataClassForAllTestClasses {
                 DURATION_EPIC_ONE);
     }
 
-    static Epic createEpicTwo(StatusTask statusTask) {
+    public static Epic createEpicTwo(StatusTask statusTask) {
         return new Epic(
                 ID_EPIC_TWO,
                 EPIC_NAME_TWO,
@@ -129,7 +136,7 @@ public class DataClassForAllTestClasses {
                 DURATION_EPIC_UPDATE);
     }
 
-    static Subtask createSubtaskOne(StatusTask statusTask) {
+    public static Subtask createSubtaskOne(StatusTask statusTask) {
         return new Subtask(
                 ID_SUBTASK_ONE,
                 ID_EPIC_TWO,
@@ -140,7 +147,7 @@ public class DataClassForAllTestClasses {
                 DURATION_SUBTASK_ONE);
     }
 
-    static Subtask createSubtaskTwo(StatusTask statusTask) {
+    public static Subtask createSubtaskTwo(StatusTask statusTask) {
         return new Subtask(
                 ID_SUBTASK_TWO,
                 ID_EPIC_TWO,
@@ -160,5 +167,17 @@ public class DataClassForAllTestClasses {
                 statusTask,
                 START_TIME_SUBTASK_UPDATE,
                 DURATION_SUBTASK_UPDATE);
+    }
+
+    public static void main(String[] args) {
+
+        TaskManager taskManager = Managers.getDefault();
+        taskManager.saveTask(createTaskOne(NEW));
+        taskManager.saveTask(createTaskTwo(NEW));
+
+        taskManager.saveEpic(createEpicOne(NEW));
+        taskManager.saveEpic(createEpicTwo(NEW));
+        taskManager.saveSubtask(createSubtaskOne(IN_PROGRESS));
+        taskManager.saveSubtask(createSubtaskTwo(IN_PROGRESS));
     }
 }

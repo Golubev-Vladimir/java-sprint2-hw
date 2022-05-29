@@ -1,14 +1,19 @@
-package service;
+package main.service;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-import static service.FileBackedTasksManagerLoader.loadTaskAndHistoryFromFile;
-import static service.Printer.println;
+import static main.service.FileBackedTasksManagerLoader.loadTaskAndHistoryFromFile;
+import static main.service.Handler.SPLITTER;
+import static main.service.Handler.TASK_LINE_DELIMITER;
+import static main.service.Printer.println;
 
-import model.*;
+import main.model.Epic;
+import main.model.Subtask;
+import main.model.ManagerSaveException;
+import main.model.Task;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
     private final String pathFile;
@@ -121,11 +126,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
         try (FileWriter writeFileTasksHistory = new FileWriter(pathFile, StandardCharsets.UTF_8)) {
             writeFileTasksHistory.write(
-                    "id,type,name,status,description, startTime, endTime, epic" + Handler.TASK_LINE_DELIMITER);
+                    "id,type,name,status,description, startTime, endTime, epic" + TASK_LINE_DELIMITER);
             for (Task task : allTasks) {
-                writeFileTasksHistory.write(task + Handler.TASK_LINE_DELIMITER);
+                writeFileTasksHistory.write(task + TASK_LINE_DELIMITER);
             }
-            writeFileTasksHistory.write(Handler.TASK_LINE_DELIMITER);
+            writeFileTasksHistory.write(TASK_LINE_DELIMITER);
             writeFileTasksHistory.write(putHistoryToString(inMemoryHistoryManager));
         } catch (IOException e) {
             e.printStackTrace();
@@ -134,7 +139,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     private String putHistoryToString(HistoryManager manager) {
         StringBuilder historyViewedTasks = new StringBuilder();
         for (Task task : manager.getHistory()) {
-            historyViewedTasks.append(task.getTaskId()).append(Handler.SPLITTER);
+            historyViewedTasks.append(task.getTaskId()).append(SPLITTER);
         }
         return historyViewedTasks.toString();
     }

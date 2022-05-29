@@ -1,10 +1,9 @@
-package model;
+package main.model;
+
+import main.service.FileBackedTasksManagerLoader;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-
-import static model.TypeTask.TASK;
-import static service.FileBackedTasksManagerLoader.TASK_TIME_FORMAT;
 
 public class Task {
     protected final long taskId;
@@ -15,7 +14,6 @@ public class Task {
     protected LocalDateTime taskEndTime;
     protected StatusTask taskStatus;
     protected long taskDuration;
-
 
     public Task(long taskId, String taskName, String taskDescription, StatusTask taskStatus,
                 LocalDateTime taskStarTime, long taskDuration) {
@@ -94,11 +92,11 @@ public class Task {
     @Override
     public String toString() {
         return getTaskId() +
-                "," + TASK +
+                "," + TypeTask.TASK +
                 "," + getTaskName() +
                 "," + getTaskStatus() +
                 "," + getTaskDescription() +
-                "," + getTaskStarTime().format(TASK_TIME_FORMAT) +
-                "," + getTaskEndTime().format(TASK_TIME_FORMAT);
+                "," + getTaskStarTime().format(FileBackedTasksManagerLoader.TASK_TIME_FORMAT) +
+                "," + getTaskEndTime().format(FileBackedTasksManagerLoader.TASK_TIME_FORMAT);
     }
 }

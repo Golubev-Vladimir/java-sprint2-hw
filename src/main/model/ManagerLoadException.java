@@ -1,6 +1,7 @@
-package model;
+package main.model;
 
 public class ManagerLoadException extends Exception {
+
     public ManagerLoadException(String message) {
         super(message);
     }

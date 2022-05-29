@@ -1,8 +1,8 @@
-package service;
+package main.service;
 
 import java.util.Objects;
 
-import static service.FileReader.readFileContentsOrNull;
+import static main.service.FileReader.readFileContentsOrNull;
 
 public class Handler {
     static final String TASK_LINE_DELIMITER = "\n";
