@@ -23,6 +23,7 @@ import static test.service.TestDataUtils.*;
 public class FileBackedTasksManagerTest extends TaskManagerTest {
 
     static final String TEST_DATA_FILE_SAVE = "JUnitSaveTask.csv";
+    static final String TEST_DATA_FILE1_SAVE = "JUnitSave1Task.csv";
     static final String TEST_DATA_FILE_LOAD = "JUnitLoadTask.csv";
 
     public FileBackedTasksManagerTest() {
@@ -37,7 +38,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest {
         final String expectedString = "id,type,name,status,description, startTime, endTime, epic\n" +
                 "1,TASK,TaskName1,IN_PROGRESS,TaskDescription1,21.05.2022 10:20,21.05.2022 11:20\n\n";
         assertEquals(expectedString, Files.readString(Path.of(TEST_DATA_FILE_SAVE)));
-        taskManager.deleteTaskById(task.getTaskId());
+
     }
 
     @Test
@@ -63,8 +64,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest {
                 "\n" +
                 "2,1,6,4,5,";
 
-        assertEquals(expectedString, Files.readString(Path.of(TEST_DATA_FILE_SAVE)));
-        taskManager.deleteAllTasks();
+        assertEquals(expectedString, Files.readString(Path.of(TEST_DATA_FILE1_SAVE)));
     }
 
     @Test

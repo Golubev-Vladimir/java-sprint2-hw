@@ -1,0 +1,8 @@
+id,type,name,status,description, startTime, endTime, epic
+1,TASK,TaskName1,NEW,TaskDescription1,21.05.2022 10:20,21.05.2022 11:20
+2,TASK,TaskName2,IN_PROGRESS,TaskDescription2,21.05.2022 11:20,21.05.2022 13:20
+4,EPIC,EpicName2,IN_PROGRESS,EpicDescription2,21.05.2022 16:00,21.05.2022 21:50
+5,SUBTASK,SubtaskName1,NEW,SubtaskDescription1,21.05.2022 16:00,21.05.2022 19:20,4
+6,SUBTASK,SubtaskName2,IN_PROGRESS,SubtaskDescription2,21.05.2022 19:20,21.05.2022 21:50,4
+
+2,1,6,4,5,

@@ -15,18 +15,17 @@ import static main.model.StatusTask.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static test.service.TestDataUtils.*;
 
-public class TaskManagerTest {
+public abstract class TaskManagerTest {
 
     TaskManager taskManager;
 
-    public TaskManagerTest(TaskManager taskManager) {
+    protected TaskManagerTest(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 
     @AfterEach
     void deleteAllData() {
         taskManager.deleteAllTasks();
-        taskManager = null;
     }
 
     @Test
